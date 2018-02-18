@@ -257,7 +257,7 @@ function ajax_send_codeword(init)
 
 
 $(document).ready(function(){
-
+  // jetzt kommt hier was anderes
 
   $('#b_submit').click(function(){
     ajax_send_codeword();
