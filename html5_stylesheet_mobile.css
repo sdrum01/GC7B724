@@ -1,0 +1,128 @@
+@charset "utf-8";
+/* CSS Document */
+
+body {background-color:#ffffff;
+  color:#000000;
+  font-family:Verdana, Geneva, sans-serif;
+  margin:0px;}
+
+body a {color:#0066ff;}
+
+header {background-color:#63adff;
+  color: #ffffff;
+  font-size: 4vw;
+  font-style:italic;
+  font-weight:bolder;
+  padding: 5px;
+  text-align:left;}
+
+#hilfscontainer{width: 100%;}
+
+aside {text-align:center;
+  width:100%;}
+
+nav {margin:10px;
+  padding-bottom:20px;
+  padding-left:5px;
+  padding-right:5px;
+  padding-top:10px;
+  text-align:center;}
+
+main {background-color:#ffffff;
+  color: #000000;
+  width:100%;}
+
+main h1 {font-size: xx-large;
+  margin-bottom: 10px;
+  margin-top: 0px;}
+
+article {
+  /*border: 1px solid grey;
+  border-radius:10px;*/
+  margin:10px;
+  padding-bottom:10px;
+  padding-left:10px;
+  padding-right:20px;
+  padding-top:10px;}
+
+footer {background-color:#63adff;
+  color:#ffffff;
+  font-size:large;
+  font-style:italic;
+  font-weight:bolder;
+  padding-bottom:10px;
+  padding-top:10px;
+  text-align:center;
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  }
+
+img { width: auto; max-width:100%;}
+
+ul {margin:0;
+    padding:0;
+    width:100%;
+    list-style-type:none;
+  font-size:large;
+}
+
+ul li a {
+    text-decoration:none;
+    color:white;
+    padding:10.5px 11px;
+  margin-bottom:10px;
+    background-color:#63adff;
+    display:block;
+  border-radius:10px;
+}
+
+ul li a:visited {color: white;}
+
+ul li a:hover, ul li .current {color: black;
+    background-color: yellow;}
+
+#logo{
+position:absolute;
+right:10px;
+width: 20%;
+}
+
+.text {
+  font-size: 4vw;
+}
+
+#tbl_gr{
+  width:100%;
+}
+
+#content_gr, #content_cross{
+  font-size: 5vw;
+  font-weight:bold;
+}
+#content_de{
+  font-size: 3vw;
+}
+#content_descript{
+  font-size: 3vw;
+  text-align:center;
+  margin:10px;
+}
+#content_gr_l{
+  font-size: 4vw;
+}
+#content_de_l{
+  font-size: 3vw;
+}
+#content_descript_l, #l_figure{
+  font-size: 3vw;
+  text-align:center;
+  margin:10px;
+}
+
+#result{
+  font-size:5vw;
+  font-family:arial;
+  width:100%;
+  text-align:center;
+}
