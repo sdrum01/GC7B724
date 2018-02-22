@@ -12,11 +12,17 @@
   margin:5px;
   background:#efefef;
   border-radius:5px;
-  text-decoration:none;
-  width:200px;
-  height:40px;
+  width:400px;
+  min-height:30px;
   vertical-align:middle;
+  text-align:center;
 }
+
+a.mylink{
+  text-decoration:none;
+  font-size:20px;
+}
+
 .linkbutton:hover{
   background:yellow;
 }
@@ -95,32 +101,31 @@ $results = $db->query($q);
 if (isset($_REQUEST['a']))
 {
   $action = $_REQUEST['a'];
-  $mode = $_REQUEST['mode'];
+  $mode = '';
+  if(isset($_REQUEST['mode'])){$mode = $_REQUEST['mode'];}
 }
 
 
 ?>
-
+<h2>Die letzten 50 Besucher:</h2>
 <?php
 
 if($action == 'drop_me')
 {
   $db = new SQLite3(DB_NAME);
   $q = "DELETE FROM access_list WHERE ip_adress = '$ip_adress'";
-  $results = $db->query($q);
-  print "<h2>Die letzten 50 Besucher:</h2>";
+  $results = $db->query($q);  
+  print '<a class="mylink" href="show_access.php?a=view&mode=solved" ><div class="linkbutton">Zeige nur gelöste</div></a>';
+  print '<a class="mylink" href="show_access.php?a=view&mode=all" ><div class="linkbutton">Zeige Alles</div></a>';
+  print '<a class="mylink" href="show_access.php?a=drop_me&mode=solved" ><div class="linkbutton">Lösche Eintrag mit meiner IP '.$ip_adress.'</div></a>';
   print get_table($mode);
-  print "<a href=\"show_access.php?a=view&mode=solved\" ><div class=\"linkbutton\">Zeige nur gelöste</div></a>";
-  print "<a href=\"show_access.php?a=view&mode=all\" ><div class=\"linkbutton\">Zeige Alles</div></a>";
-  print "<a href=\"show_access.php?a=drop_me&mode=solved\" ><div class=\"linkbutton\">Lösche Eintrag mit meiner IP $ip_adress</div></a>";
 }
 if($action == 'view')
 {
-  print "<h2>Die letzten 50 Besucher:</h2>";
+  print '<a class="mylink" href="show_access.php?a=view&mode=solved" ><div class="linkbutton">Zeige nur gelöste</div></a>';
+  print '<a class="mylink" href="show_access.php?a=view&mode=all" ><div class="linkbutton">Zeige Alles</div></a>';
+  print '<a class="mylink" href="show_access.php?a=drop_me&mode=solved" ><div class="linkbutton">Lösche Eintrag mit meiner IP '.$ip_adress.'</div></a>';
   print get_table($mode);
-  print "<a href=\"show_access.php?a=view&mode=solved\" ><div class=\"linkbutton\">Zeige nur gelöste</div></a>";
-  print "<a href=\"show_access.php?a=view&mode=all\" ><div class=\"linkbutton\">Zeige Alles</div></a>";
-  print "<a href=\"show_access.php?a=drop_mew&mode=solved\" ><div class=\"linkbutton\">Lösche Eintrag mit meiner IP $ip_adress</div></a>";
 }
 
 ?>
