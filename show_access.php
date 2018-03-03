@@ -26,7 +26,11 @@ a.mylink{
 .linkbutton:hover{
   background:yellow;
 }
-  
+
+table{
+  font-size:1.2vw;
+}
+
 </style>
 </head>
 <body>
@@ -52,7 +56,7 @@ function get_table($mode)
 {
   //$q = "SELECT * FROM access_list WHERE step = 3 ORDER BY ts DESC LIMIT 50";
   $db = new SQLite3(DB_NAME);
-  
+
   if(($mode == '')||($mode == 'solved')){
     $q = "SELECT * FROM access_list WHERE step == 3 ORDER BY ts DESC LIMIT 50";
 
@@ -75,7 +79,7 @@ $results = $db->query($q);
 
   $tbl .= "<th >Checknumber</th>";
   $tbl .= "<th >Codeword</th>";
-  //$tbl .= "<th >last_pw</th>";
+  $tbl .= "<th >pw versuch</th>";
   $tbl .= "</tr>";
   $tbl .= "</thead>";
   $tbl .= "<tbody>";
@@ -89,7 +93,7 @@ $results = $db->query($q);
      $tbl .= "<td>".$row['try']."</td>";
      $tbl .= "<td>".$row['cross']."</td>";
      $tbl .= "<td>".$row['codeword']."</td>";
-     //$tbl .= "<td>".$row['pw']."</td>";
+     $tbl .= "<td>".$row['pw']."</td>";
      $tbl .= "</tr>";
   }
   $tbl .= "</tbody>";
@@ -106,15 +110,12 @@ if (isset($_REQUEST['a']))
 }
 
 
-?>
-<h2>Die letzten 50 Besucher:</h2>
-<?php
 
 if($action == 'drop_me')
 {
   $db = new SQLite3(DB_NAME);
   $q = "DELETE FROM access_list WHERE ip_adress = '$ip_adress'";
-  $results = $db->query($q);  
+  $results = $db->query($q);
   print '<a class="mylink" href="show_access.php?a=view&mode=solved" ><div class="linkbutton">Zeige nur gelöste</div></a>';
   print '<a class="mylink" href="show_access.php?a=view&mode=all" ><div class="linkbutton">Zeige Alles</div></a>';
   print '<a class="mylink" href="show_access.php?a=drop_me&mode=solved" ><div class="linkbutton">Lösche Eintrag mit meiner IP '.$ip_adress.'</div></a>';

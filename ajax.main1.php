@@ -252,7 +252,7 @@ if($action == 'check_code')
 
   $txt1_ger = '<b>Richtig! Du hast mich im "Flüsterbogen" gefunden!</b>';
   //$txt1 .= '<p><br/>Solltest Du zu Zweit sein, kannst Du mal versuchen, auf einer Seite in die Rille des Bogens zu flüstern, während auf der anderen Seite Jemand versucht, das geflüsterte Wort zu hören!</p>';
-  $txt1_ger .= '<br/>Geh doch mal hinein und suche auf der linken Seite hinter der Wand mein Klingelschild! <br/><b>Finde meinen Namen heraus!</b><br/>';
+  $txt1_ger .= '<br/>Geh doch mal hinein und suche auf der linken Seite hinter der Wand mein Klingelschild! <br/><b>Finde meinen Namen heraus!</b><br/><div id="descript_remark">Sollte die Tür im Winter zu sein, drücke vorsichtig dagegen, und schieße sie wieder hinter Dir!</div>';
 
   $txt2_ger = 'Nein, "'.$code.'" heiße ich leider nicht!<br/>Gehe hinein, suche auf der linken Seite hinter der Tür hinter der Wand und <br/><b>finde meinen Namen heraus</b>!';
 
@@ -309,8 +309,8 @@ if($action == 'check_code')
 if($action == 'init')
 {
   //$txt0_ger = 'Willkommen, edler Fremder! <br/>In nur 2 Schritten bist Du am Ziel. <br/>Finde zuerst heraus, wo ich wohne!  Gib den Namen des Hauses gefolgt von der Zahl [X] ein.<br/>Beispiel: Geisterhaus12345';
-  $txt0_ger = 'Willkommen auf dem Untermarkt, edler Fremder! <br/>In nur 2 Schritten bist Du am Ziel. <br/>Gib zur Kontrolle die Zahl <b>[X]</b> ins Eingabefeld ein.';
-  $txt0_eng = 'Welcome to the Untermarket, dear visitor!<br/>In only 2 steps you are at the goal.<br/>Enter the number <b>[X]</b> for control to get the next step!';
+  $txt0_ger = 'Willkommen auf dem Untermarkt, edler Fremder! <br/>In nur 2 Schritten bist Du am Ziel. <br/>Gib zur Kontrolle die 7-Stellige Zahl <b>[X]</b> ins Eingabefeld ein.';
+  $txt0_eng = 'Welcome to the Untermarket, dear visitor!<br/>In only 2 steps you are at the goal.<br/>Enter the number <b>[X]</b> (7 digits) to get the next step!';
 
   init();
   $arr_result = array();
