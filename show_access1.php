@@ -5,9 +5,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Die 3 Meta-Tags oben *müssen* zuerst im head stehen; jeglicher sonstiger head-Inhalt muss *nach* diesen Tags kommen -->
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" href="../../favicon.ico">
+    <meta name="description" content="Portal zum Geist des Görlitzer Untermartktes">
+    <meta name="author" content="sdrum">
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.png">
 
     <title>Show Access - Geist vom Untermarkt</title>
 
