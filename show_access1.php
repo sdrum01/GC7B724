@@ -14,21 +14,22 @@
     <!-- Bootstrap-CSS -->
     <link href="include/bootstrap-3.3.5-dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Besondere Stile für diese Vorlage -->
-    <link href="navbar-static-top.css" rel="stylesheet">
-
    
     <!-- Unterstützung für Media Queries und HTML5-Elemente in IE8 über HTML5 shim und Respond.js -->
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+  <style>
+  body { padding-top: 70px; }
+  
+  </style>
   </head>
 
   <body>
 
     <!-- Statische Navbar -->
-    <nav class="navbar navbar-default navbar-static-top navbar-inverse">
+    <nav class="navbar navbar-default navbar-fixed-top navbar-inverse">
       <div class="container">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -42,7 +43,7 @@
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
             
-            <li class="active"><a href="show_access1.php?a=view&mode=solved">gelöste</a></li>
+            <li class="active"><a href="show_access1.php?a=view&mode=solved">Gelöste</a></li>
             <li><a href="show_access1.php?a=view&mode=all">Alles</a></li>
             <li><a href="show_access1.php?a=drop_me&mode=">lösche meine Einträge</a></li>
             
@@ -60,8 +61,16 @@ define("DB_NAME",'useraccess_gc7b724.sqlite');
 $ip_adress = $_SERVER['REMOTE_ADDR'];
 $action = '';
 
+// kurzform ohne zeit:
+function ts_short($ts)
+{
+  $temp = bcdiv($ts, 86400, 0);
+  return ($temp);
+}
+
 function get_table($mode)
 {
+  $date_ts_now = ts_short(time());
   //$q = "SELECT * FROM access_list WHERE step = 3 ORDER BY ts DESC LIMIT 50";
   $db = new SQLite3(DB_NAME);
 
@@ -93,7 +102,12 @@ $results = $db->query($q);
   $tbl .= "</thead>";
   $tbl .= "<tbody>";
   while ($row = $results->fetchArray()) {
-     $tbl .= "<tr>";
+     $css = '';
+     $date_ts = ts_short($row['ts']);
+     if($date_ts == $date_ts_now){$css = 'class="success"';}else
+     if($date_ts == $date_ts_now-1){$css = 'class="info"';}
+     //if($date_ts == $date_ts_now-2){$css = 'class="yellow"';}
+     $tbl .= "<tr $css>";
      $tbl .= "<td>".$row['id']."</td>";
      $tbl .= "<td>".$row['ip_adress']."</td>";
      //$tbl .= "<td>".$row['ts']."</td>";
@@ -126,16 +140,10 @@ if($action == 'drop_me')
   $db = new SQLite3(DB_NAME);
   $q = "DELETE FROM access_list WHERE ip_adress = '$ip_adress'";
   $results = $db->query($q);
-//  print '<a class="mylink" href="show_access.php?a=view&mode=solved" ><div class="linkbutton">Zeige nur gelöste</div></a>';
-//  print '<a class="mylink" href="show_access.php?a=view&mode=all" ><div class="linkbutton">Zeige Alles</div></a>';
-//  print '<a class="mylink" href="show_access.php?a=drop_me&mode=solved" ><div class="linkbutton">Lösche Eintrag mit meiner IP '.$ip_adress.'</div></a>';
   print get_table($mode);
 }
 if($action == 'view')
 {
-//  print '<a class="mylink" href="show_access.php?a=view&mode=solved" ><div class="linkbutton">Zeige nur gelöste</div></a>';
-//  print '<a class="mylink" href="show_access.php?a=view&mode=all" ><div class="linkbutton">Zeige Alles</div></a>';
-//  print '<a class="mylink" href="show_access.php?a=drop_me&mode=solved" ><div class="linkbutton">Lösche Eintrag mit meiner IP '.$ip_adress.'</div></a>';
   print get_table($mode);
 }
 
