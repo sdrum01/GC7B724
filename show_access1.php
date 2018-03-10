@@ -88,10 +88,11 @@ $results = $db->query($q);
   $tbl .= "<thead style=\"text-align:left;\">";
   $tbl .= "<tr>";
   $tbl .= "<th >ID</th>";
-  $tbl .= "<th >IP</th>";
+  
   //$tbl .= "<th width=\"200\">ts</th>";
   $tbl .= "<th >DATE</th>";
   $tbl .= "<th >Time</th>";
+  $tbl .= "<th >IP</th>";
   $tbl .= "<th >Step</th>";
   $tbl .= "<th >Versuch</th>";
 
@@ -104,15 +105,19 @@ $results = $db->query($q);
   while ($row = $results->fetchArray()) {
      $css = '';
      $date_ts = ts_short($row['ts']);
-     if($date_ts == $date_ts_now){$css = 'class="success"';}else
-     if($date_ts == $date_ts_now-1){$css = 'class="info"';}
+     if($date_ts == $date_ts_now){$css = 'class="success"';$datum = "Heute";}else
+     if($date_ts == $date_ts_now-1){$css = 'class="info"';$datum = "Gestern";}else
+      {
+       $datum = date("d.m.y",$row['ts'] );
+      }
      //if($date_ts == $date_ts_now-2){$css = 'class="yellow"';}
      $tbl .= "<tr $css>";
      $tbl .= "<td>".$row['id']."</td>";
-     $tbl .= "<td>".$row['ip_adress']."</td>";
+    
      //$tbl .= "<td>".$row['ts']."</td>";
-     $tbl .= "<td>".date("d.m.y",$row['ts'] )."</td>";
+     $tbl .= "<td>".$datum."</td>";
      $tbl .= "<td>".date("H:i",$row['ts'] )."</td>";
+     $tbl .= "<td>".$row['ip_adress']."</td>";
      $tbl .= "<td>".$row['step']."</td>";
      $tbl .= "<td>".$row['try']."</td>";
      $tbl .= "<td>".$row['cross']."</td>";
