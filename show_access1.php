@@ -14,7 +14,9 @@
     <!-- Bootstrap-CSS -->
     <link href="include/bootstrap-3.3.5-dist/css/bootstrap.min.css" rel="stylesheet">
 
-   
+    <script src="include/js/jquery.min.js"></script>
+    <script src="include/bootstrap-3.3.5-dist/js/bootstrap.min.js"></script>
+    <script src="include/show_access.js"></script>
     <!-- Unterstützung für Media Queries und HTML5-Elemente in IE8 über HTML5 shim und Respond.js -->
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
@@ -46,6 +48,7 @@
             <li class="active"><a href="show_access1.php?a=view&mode=solved">Gelöste</a></li>
             <li><a href="show_access1.php?a=view&mode=all">Alles</a></li>
             <li><a href="show_access1.php?a=drop_me&mode=">lösche meine Einträge</a></li>
+            <li id="menu_keywords">Keywords</li>
             
           </ul>
           
@@ -161,9 +164,8 @@ if($action == 'view')
     <!-- Bootstrap-JavaScript
     ================================================== -->
     <!-- Am Ende des Dokuments platziert, damit Seiten schneller laden -->
-    <script src="include/js/jquery.min.js"></script>
-    <script src="include/bootstrap-3.3.5-dist/js/bootstrap.min.js"></script>
+
     <!-- IE10-Anzeigefenster-Hack für Fehler auf Surface und Desktop-Windows-8 -->
-    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+    <!--<script src="../../assets/js/ie10-viewport-bug-workaround.js"></script> -->
   </body>
 </html>

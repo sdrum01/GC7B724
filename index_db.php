@@ -106,10 +106,6 @@ input[required]{
     display:inline;
 }
 
-.answer_correct{
-  background-image: url("img/ghost_happy.jpeg)  
-}
-
 </style>
 <script type="text/javascript" src="include/js/jquery.min.js" charset="utf-8"></script>
 <script language="JavaScript" charset="utf-8">
@@ -117,7 +113,6 @@ input[required]{
   var text_ger = '';
   var text_eng = '';
   var current_lang = 'ger';
-  var which = 1;
 
 function ts()
 {
@@ -142,9 +137,8 @@ function ajax_send_codeword(init)
 {
 
   var mycode = $('#e_passwd').val();
-  var url = "ajax.main1_nodb.php";
+  var url = "ajax.main1.php";
   var action = 'check_code';
-  var wh = which;
   if(init == true){action = 'init'; mycode='dummy';}
   if(mycode != '')
   {
@@ -155,8 +149,7 @@ function ajax_send_codeword(init)
       method: "POST",
       data: {
         code: mycode,
-        a: action,
-        wh: wh,
+        a: action
       },
       // bei Fehlern
       error: function(jqXHR, textStatus){
@@ -188,7 +181,7 @@ function ajax_send_codeword(init)
 
           //$('#l_message').html(answer);
           show_text(current_lang);
-          which = 2;
+
           $('#myfigure').fadeOut(500,function(){
             $('#myfigure').html(pic).fadeIn(1000);
             $('#e_passwd').val('').focus();
@@ -214,8 +207,8 @@ function ajax_send_codeword(init)
             $('#content_descript_l').html('Beispiel/Example:');
           }
           if(descript != ''){
-            //$('#content_cross').html(cross);
-            //$('#content_cross_l').html('Kontrollzahl / checknumber:');
+            $('#content_cross').html(cross);
+            $('#content_cross_l').html('Kontrollzahl / checknumber:');
           }
           $('#tbl_gr').fadeIn(1000);
           //$('#l_message').html(answer);
@@ -229,8 +222,6 @@ function ajax_send_codeword(init)
           $('#e_passwd').val('').focus();
           //$('#l_message').html(answer);
           show_text(current_lang);
-          if (result == 0){which = 1;} // erster Code passte nicht
-          if (result == 2){which = 2;} // zweiter Code passte nicht
         }else if (result == 5)
         {
           //$('#l_message').html('In der letzten Zeit hattest Du zu viele Fehleingaben. Bitte einen Moment warten...');
