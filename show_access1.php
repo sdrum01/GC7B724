@@ -24,7 +24,9 @@
     <![endif]-->
   <style>
   body { padding-top: 70px; }
-  
+  .wrong{
+    color:red;
+    }
   </style>
   </head>
 
@@ -78,16 +80,16 @@ function get_table($mode)
   $db = new SQLite3(DB_NAME);
 
   if(($mode == '')||($mode == 'solved')){
-    $q = "SELECT * FROM access_list WHERE step == 3 ORDER BY ts DESC LIMIT 50";
+    $q = "SELECT * FROM access_list WHERE step == 3 ORDER BY ts DESC LIMIT 30";
 
   }else{
-    $q = "SELECT * FROM access_list ORDER BY ts DESC LIMIT 50";
+    $q = "SELECT * FROM access_list ORDER BY ts DESC LIMIT 30";
 
   }
 
 $results = $db->query($q);
 
-  $tbl = '<table class="table table-striped">';
+  $tbl = "<table class=\"table table-striped\">";
   $tbl .= "<thead style=\"text-align:left;\">";
   $tbl .= "<tr>";
   $tbl .= "<th >ID</th>";
@@ -107,14 +109,16 @@ $results = $db->query($q);
   $tbl .= "<tbody>";
   while ($row = $results->fetchArray()) {
      $css = '';
+     $css_wrong = '';
      $date_ts = ts_short($row['ts']);
-     if($date_ts == $date_ts_now){$css = 'class="success"';$datum = "Heute";}else
-     if($date_ts == $date_ts_now-1){$css = 'class="info"';$datum = "Gestern";}else
+     //if($date_ts == $date_ts_now){$css = 'class="success"';$datum = "Heute";}else
+     //if($date_ts == $date_ts_now-1){$css = 'class="info"';$datum = "Gestern";}else
       {
        $datum = date("d.m.y",$row['ts'] );
       }
+     if(($row['step'] == 0)or($row['step'] == 2)){$css_wrong = 'class="wrong"';}
      //if($date_ts == $date_ts_now-2){$css = 'class="yellow"';}
-     $tbl .= "<tr $css>";
+     $tbl .= "<tr $css $css_wrong>";
      $tbl .= "<td>".$row['id']."</td>";
     
      //$tbl .= "<td>".$row['ts']."</td>";

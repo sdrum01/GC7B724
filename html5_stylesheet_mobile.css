@@ -119,6 +119,9 @@ width: 20%;
   text-align:center;
   margin:10px;
 }
+#descript_remark{
+  font-size: 2vw;
+}
 
 #result{
   font-size:5vw;

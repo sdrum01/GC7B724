@@ -138,9 +138,16 @@ function show_text(lang)
   }
 }
 
+function correct_password(){
+  var mycode = $('#e_passwd').val();
+  var s = mycode.replace(' ','');
+  $('#e_passwd').val(s);
+  return(s);
+}
+
 function ajax_send_codeword(init)
 {
-
+  correct_password();
   var mycode = $('#e_passwd').val();
   var url = "ajax.main1_nodb.php";
   var action = 'check_code';
@@ -214,12 +221,10 @@ function ajax_send_codeword(init)
             $('#content_descript_l').html('Beispiel/Example:');
           }
           if(descript != ''){
-            //$('#content_cross').html(cross);
-            //$('#content_cross_l').html('Kontrollzahl / checknumber:');
+            $('#content_cross').html(cross);
+            $('#content_cross_l').html('Kontrollzahl / checknumber:');
           }
           $('#tbl_gr').fadeIn(1000);
-          //$('#l_message').html(answer);
-          //$('#myfigure').html(ghost);
           $('#myfigure').html(pic);
           $('#l_figure').html('Vielen Dank an das Hotel "Börse" für die Erlaubnis und an Stefan Sander für die schönen Fotos');
         }
@@ -254,7 +259,7 @@ function ajax_send_codeword(init)
   }else{
     if(init == undefined){
       //$('#l_message').html('Es wäre zu gütig, wenn Du ein Codewort eingeben würdest.');
-      text_ger = 'Es wäre zu gütig, wenn Du ein Codewort eingeben würdest.';
+      text_ger = 'Es wäre zu gütig, wenn Er gnädigerweise ein Codewort eingeben würde!';
       text_eng = 'Please enter a valid codeword!';
       show_text(current_lang);
       $('#e_passwd').val('').focus();
@@ -282,6 +287,7 @@ $(document).ready(function(){
   $('#e_passwd').keyup(function(e) // Enter-Taste abfangen beim Eingabeelement
   {
     var keycode = e.keyCode;
+    //console.debug(keycode);
     if(keycode == 13) {
       ajax_send_codeword();
     }
@@ -317,7 +323,7 @@ $(document).ready(function(){
 
     <table id="tbl_gr">
       <tr>
-        <td id="content_gr_l">Görlitzerisch:</td>
+        <td id="content_gr_l">Görlitzer Dialekt:</td>
         <td id="content_gr"></td>
       </tr>
       <tr>

@@ -91,17 +91,19 @@ function compare_code($code,$which)
 
   $code1 = '1931035';
   $code2 = 'Gobius';
+  
+  //print $code . " - " .$which . " - ".$code1;
 
   if($which == 1)
   {
-    //if( (strtolower($code) == strtolower($code1)) || (strtolower($code) == strtolower($code1_1))|| (strtolower($code) == strtolower($code1_2)) )
     if( strtolower($code) == strtolower($code1))
     {
       $result = 1; // 1. code passt
+    //print "test";
     }
   }else
   if($which == 2)
-  {
+  {    
     if(strtolower($code) == strtolower($code2))
     {
       $result = 3; // 2. code passt
@@ -232,7 +234,7 @@ function load_csv()
   $rand = rand(0,count($arr_csv)-1);
 
   $arr_result = $arr_csv[$rand];
-  write_codeword($arr_result['de-gr']);
+  //write_codeword($arr_result['de-gr']);
   return $arr_result;
 }
 
@@ -243,29 +245,30 @@ if($action == 'check_code')
 {
   //$code = mysql_real_escape_string($_REQUEST['code']);
   $code = trim($_REQUEST['code']);
+  $which = trim($_REQUEST['wh']);
 
 
 
   $arr_result = array();
 // GER
-  $txt0_ger = 'Nein, der Code "'.$code.'" ist leider falsch oder Du hast zu lange gewartet.<br/>Versuchs nochmal von Vorn!<br/>Gib die Zahl <b>[X]</b> ins Eingabefeld ein.';
+  $txt0_ger = 'Nein, der Code "'.$code.'" ist leider falsch.<br/>Versuchs nochmal von Vorn!<br/>Gib die Zahl <b>[X]</b> ins Eingabefeld ein.';
 
-  $txt1_ger = '<b>Richtig! Du hast mich im "Flüsterbogen" gefunden!</b>';
+  $txt1_ger = '<div class="answer_correct"><b >Richtig! <img src="img/ghost_happy.jpeg" style="width:50px;"/>Du hast mich im "Flüsterbogen" gefunden!</b>';
   //$txt1 .= '<p><br/>Solltest Du zu Zweit sein, kannst Du mal versuchen, auf einer Seite in die Rille des Bogens zu flüstern, während auf der anderen Seite Jemand versucht, das geflüsterte Wort zu hören!</p>';
-  $txt1_ger .= '<br/>Geh doch mal hinein und suche auf der linken Seite hinter der Wand mein Klingelschild! <br/><b>Finde meinen Namen heraus!</b><br/><div id="descript_remark">Sollte die Tür im Winter zu sein, drücke vorsichtig dagegen, und schließe sie wieder hinter Dir!</div>';
-
+  $txt1_ger .= '<br/>Geh doch mal hinein und suche auf der linken Seite hinter der Wand mein Klingelschild! <br/><b>Finde meinen Namen heraus und gib Ihn hier ein!</b><br/><div id="descript_remark">Sollte die Tür im Winter zu sein, drücke vorsichtig dagegen, und schließe sie wieder hinter Dir!</div>';
+  $txt1_ger .= '</div>';
   $txt2_ger = 'Nein, "'.$code.'" heiße ich leider nicht!<br/>Gehe hinein, suche auf der linken Seite hinter der Tür hinter der Wand und <br/><b>finde meinen Namen heraus</b>!';
 
   $txt3_ger = '<b>Gratulation, so heiße ich!</b>';
   $txt3_ger .= '<p >Danke, dass Du mich, den Geist des Untermarkts besucht hast. Ich hoffe, Du hattest etwas Spaß dabei.</p>';
-  $txt3_ger .= '<p >Nun zur Logbedingung: <br/>Bitte baue in Deinen Online-Log diesen typischen Görlitzer Ausdruck und eine Kontrollzahl ein: </p>';
+  $txt3_ger .= '<p >Nun zur Logbedingung: <br/>Bitte baue in Deinen Online-Log diesen typischen Görlitzer Ausdruck ein: </p>';
 
 // ENG
   $txt0_eng = 'No, Sorry. the code "'.$code.'" was wrong or you have been waiting too long.<br/>Try again!Enter the number <b>[X]</b> in the input field to get the next step';
 
   $txt1_eng = '<b>Correct, you have found me! I\'m living in the "Flüsterbogen"</b>';
   //$txt1 .= '<p><br/>Solltest Du zu Zweit sein, kannst Du mal versuchen, auf einer Seite in die Rille des Bogens zu flüstern, während auf der anderen Seite Jemand versucht, das geflüsterte Wort zu hören!</p>';
-  $txt1_eng .= '<p>Enter the entrance portal and have a look on my doorbell to <b>find out my name !</b><br/>';
+  $txt1_eng .= '<p>Enter the entrance portal and search my doorbell to <b>find out my name !</b><br/> Enter the Name in the Input-field<br/><br/>';
   $txt1_eng .= 'The doorbell you will find on the left side behind the wall</p>';
 
   $txt2_eng = 'No, my name isn\'t "'.$code.'", sorry!<br/>Enter the entrance portal, search on the left side behind the door and ring on my bell to <b>find out my name!</b><br/>';
@@ -279,7 +282,8 @@ if($action == 'check_code')
 
   if (preg_match("/^([a-zA-Z0-9öäüßÖÄÜß?!,.;:_() \n\r-]+)$/is", $code))
   {
-    $coderesult = check_code($code);
+    //$coderesult = check_code($code);
+    $coderesult = compare_code($code,$which);
   }
 
   $arr_result['result'] = $coderesult;
@@ -312,7 +316,7 @@ if($action == 'init')
   $txt0_ger = 'Willkommen auf dem Untermarkt, edler Fremder! <br/>In nur 2 Schritten bist Du am Ziel. <br/>Gib zur Kontrolle die 7-Stellige Zahl <b>[X]</b> ins Eingabefeld ein.';
   $txt0_eng = 'Welcome to the Untermarket, dear visitor!<br/>In only 2 steps you are at the goal.<br/>Enter the number <b>[X]</b> (7 digits) to get the next step!';
 
-  init();
+  //init();
   $arr_result = array();
 
   $arr_result['result'] = -1;

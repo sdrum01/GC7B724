@@ -126,6 +126,10 @@ width: 150px;
   margin:5px;
 }
 
+#descript_remark{
+  font-size: small;
+}
+
 #result{
   font-size: xx-large;
   font-family:arial;

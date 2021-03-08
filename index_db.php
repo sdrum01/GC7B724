@@ -258,6 +258,9 @@ function ajax_send_codeword(init)
 
 $(document).ready(function(){
 
+  //message_default();
+
+
   $('#b_submit').click(function(){
     ajax_send_codeword();
   });

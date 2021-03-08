@@ -4,8 +4,10 @@ define("DB_NAME",'useraccess_gc7b724.sqlite');
 $db = new SQLite3(DB_NAME);
 $db->busyTimeout(5000);
 
-$ip_adress = $_SERVER['REMOTE_ADDR'];
-$cross = 0; // zufallszahl zum loggen
+$ip_adress = $_SERVER['REMOTE_ADDR'];// zufallszahl zum loggen
+$cross = rand(1000,9999);
+
+$ts = time(); // zum Zeitstempel aufdrücken und vergleichen
 
 // WAL mode has better control over concurrency.
 // Source: https://www.sqlite.org/wal.html
@@ -87,30 +89,39 @@ function sqliteexec($query)
 // Codecheck 1 + 2
 function compare_code($code,$which)
 {
+  global $ip_adress; // Identifikation des Users
+  $ts = time(); // zum Zeitstempel aufdrücken und vergleichen
+  
   $result = 0; // default: erster code falsch
 
   $code1 = '1931035';
   $code2 = 'Gobius';
   
+  $forbidden = array(".", ",", " ");
+  $code_sauber = str_replace($forbidden, "", $code);
+  
   //print $code . " - " .$which . " - ".$code1;
 
   if($which == 1)
   {
-    if( strtolower($code) == strtolower($code1))
+    if( strtolower($code_sauber) == strtolower($code1))
     {
       $result = 1; // 1. code passt
-    //print "test";
+    }else{
+    //
     }
   }else
   if($which == 2)
   {    
-    if(strtolower($code) == strtolower($code2))
+    if(strtolower($code_sauber) == strtolower($code2))
     {
       $result = 3; // 2. code passt
     }else{
       $result = 2; // 2.code passt nicht
     }
   }
+  // $q_write = "UPDATE access_list SET pw = '$code' ,try = 0, ts = $ts, step = $compare_result, cross = 0000 WHERE id = $id";
+  
   return $result;
 }
 
@@ -253,15 +264,15 @@ if($action == 'check_code')
 // GER
   $txt0_ger = 'Nein, der Code "'.$code.'" ist leider falsch.<br/>Versuchs nochmal von Vorn!<br/>Gib die Zahl <b>[X]</b> ins Eingabefeld ein.';
 
-  $txt1_ger = '<div class="answer_correct"><b >Richtig! <img src="img/ghost_happy.jpeg" style="width:50px;"/>Du hast mich im "Flüsterbogen" gefunden!</b>';
+  $txt1_ger = '<div class="answer_correct"><b >Richtig! <img src="img/ghost_happy.jpeg" style="width:50px;"/>Du hast mich im "Flüsterbogen" , Untermarkt 22 gefunden!</b>';
   //$txt1 .= '<p><br/>Solltest Du zu Zweit sein, kannst Du mal versuchen, auf einer Seite in die Rille des Bogens zu flüstern, während auf der anderen Seite Jemand versucht, das geflüsterte Wort zu hören!</p>';
-  $txt1_ger .= '<br/>Geh doch mal hinein und suche auf der linken Seite hinter der Wand mein Klingelschild! <br/><b>Finde meinen Namen heraus und gib Ihn hier ein!</b><br/><div id="descript_remark">Sollte die Tür im Winter zu sein, drücke vorsichtig dagegen, und schließe sie wieder hinter Dir!</div>';
+  $txt1_ger .= '<br/>Geh doch mal hinein und suche auf der linken Seite hinter der Wand mein Klingelschild! <br/>Klingel bei mir,<b> finde meinen Namen heraus und gib Ihn hier ein!</b><br/><div id="descript_remark">Sollte die Tür im Winter zu sein, drücke vorsichtig dagegen, und schließe sie wieder hinter Dir!<br/>Sollte leider komplett verschlossen sein, dann nutze bitte die Logbedingung per Mail an <a href="mailto:geistvomuntermarkt-1931035@s-drum.de">geistvomuntermarkt-1931035@s-drum.de</a> !</div>';
   $txt1_ger .= '</div>';
-  $txt2_ger = 'Nein, "'.$code.'" heiße ich leider nicht!<br/>Gehe hinein, suche auf der linken Seite hinter der Tür hinter der Wand und <br/><b>finde meinen Namen heraus</b>!';
+  $txt2_ger = 'Nein, "'.$code.'" heiße ich leider nicht!<br/>Gehe hinein, suche auf der linken Seite hinter der Tür hinter der Wand und <br/><b>finde meinen Namen heraus, indem Du mal bei mir klingelst!</b>!';
 
   $txt3_ger = '<b>Gratulation, so heiße ich!</b>';
-  $txt3_ger .= '<p >Danke, dass Du mich, den Geist des Untermarkts besucht hast. Ich hoffe, Du hattest etwas Spaß dabei.</p>';
-  $txt3_ger .= '<p >Nun zur Logbedingung: <br/>Bitte baue in Deinen Online-Log diesen typischen Görlitzer Ausdruck ein: </p>';
+  $txt3_ger .= '<p >Danke, dass Du mich, den Geist des Untermarkts besucht hast. Du darfst nun natürlich loggen, wenn Du die Logbedingung respektierst.</p>';
+  $txt3_ger .= '<p >Nun zur Logbedingung: <br/>Bitte baue in Deinen Online-Log diesen typischen Görlitzer Ausdruck zusammen mit der 4-Stelligen Kontrollzahl ein: </p>';
 
 // ENG
   $txt0_eng = 'No, Sorry. the code "'.$code.'" was wrong or you have been waiting too long.<br/>Try again!Enter the number <b>[X]</b> in the input field to get the next step';
@@ -274,8 +285,8 @@ if($action == 'check_code')
   $txt2_eng = 'No, my name isn\'t "'.$code.'", sorry!<br/>Enter the entrance portal, search on the left side behind the door and ring on my bell to <b>find out my name!</b><br/>';
 
   $txt3_eng = '<b>Yes, it\'s my Name, congratulations!</b>';
-  $txt3_eng .= '<p >Thank you for visiting me, the ghost of the Untermarkt. I hope, you had a lot of fun with me.</p>';
-  $txt3_eng .= '<p >Here comes the log-condition:<br/>Please insert this typical dialect word and this check-number into your Online-Log:</p>';
+  $txt3_eng .= '<p >Thank you for visiting me, the ghost of the Untermarkt. Of course, you may log, when you respect my log-condition! I hope, you had a lot of fun with me.</p>';
+  $txt3_eng .= '<p >Here comes the log-condition:<br/>Please insert this typical dialect word and the 4Digit check-number into your Online-Log:</p>';
 
 
   $coderesult = 0;
@@ -286,6 +297,8 @@ if($action == 'check_code')
     $coderesult = compare_code($code,$which);
   }
 
+  $snip = '';
+  
   $arr_result['result'] = $coderesult;
 
   if($coderesult == 0){
@@ -301,13 +314,28 @@ if($action == 'check_code')
     $arr_result['answer_eng'] = $txt2_eng;
     $arr_result['pic'] = 'fbogen.jpg';
   }else if($coderesult == 3){
+    $arr_snipplet = load_csv();
     $arr_result['answer_ger'] = $txt3_ger;
     $arr_result['answer_eng'] = $txt3_eng;
     $arr_result['pic'] = '100629069_8.jpg';
-    $arr_result['snipplet'] = load_csv();
+    $arr_result['snipplet'] = $arr_snipplet;
     $arr_result['crossfoot'] = $cross;
+    
+    $snip = $arr_snipplet['de-gr'];
   }
+  
   send_ajax( $arr_result );
+  
+  //log
+    $q_write = "INSERT INTO access_list (ip_adress,ts,pw,try,step,cross, codeword) VALUES (
+    '$ip_adress',
+    $ts,
+    '$code',
+    0,'$coderesult', 
+    '$cross', 
+    '$snip')";
+    
+    sqliteexec($q_write);
 }
 
 if($action == 'init')
