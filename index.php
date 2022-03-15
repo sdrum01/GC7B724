@@ -236,22 +236,19 @@ function ajax_send_codeword(init)
           show_text(current_lang);
           if (result == 0){which = 1;} // erster Code passte nicht
           if (result == 2){which = 2;} // zweiter Code passte nicht
-        }else if (result == 5)
+        }
+        else if (result == 4)
         {
-          //$('#l_message').html('In der letzten Zeit hattest Du zu viele Fehleingaben. Bitte einen Moment warten...');
-          text_ger = 'In der letzten Zeit hattest Du zu viele Fehleingaben. Bitte ca.10 Minuten warten...';
-          text_eng = 'In the past there was too many incorrect entries. Please wait 10 minutes...';
+          which = 1;
           show_text(current_lang);
-
+          $('#myfigure').fadeOut(500,function(){
+            $('#myfigure').html(pic).fadeIn(1000);
+            $('#e_passwd').val('').focus();
+          });
         }
         else  // Init-Antwort
         {
-          //$('#l_message').html(answer);
-
           show_text(current_lang);
-
-
-          $('#e_passwd').val('').focus();
         }
       },
       timeout: 20000 // sets timeout to x seconds

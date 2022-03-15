@@ -15,9 +15,9 @@ $ts = time(); // zum Zeitstempel aufdrücken und vergleichen
 $action = '';
 
 ////////////////////// POST or GET requests //////////////////////
-if (isset($_REQUEST['a']))
+if (isset($_POST['a']))
 {
-  $action = $_REQUEST['a'];
+  $action = $_POST['a'];
 }
 
 
@@ -150,6 +150,7 @@ function init()
 
 // die eigentliche Codeauswertung mit Blick auf die Fehlversuche:
 // Rückgabe: 0=erster code falsch; 1=erster Code richtig; 2=2.code falsch; 3= 2.code richtig; 5= Zu viele falsche versuche
+/*
 function check_code($code)
 {
   global $ip_adress; // Identifikation des Users
@@ -212,7 +213,9 @@ function check_code($code)
   }
   return $compare_result;
 }
+*/
 
+/*
 function write_codeword($codeword)
 {
   global $ip_adress; // Identifikation des Users
@@ -235,6 +238,17 @@ function write_codeword($codeword)
   }
   return false;
 }
+*/
+
+function check_bruteforce(){
+  global $ip_adress; // Identifikation des Users
+  $ts = time(); // zum Zeitstempel aufdrücken und vergleichen
+  $max_time = $ts - 300; // 5 Minuten Timeout
+  // anhand der Benutzer-ip die id holen
+  $q = "SELECT * FROM access_list WHERE ip_adress = '$ip_adress' AND ts > $max_time";
+  $arr = sqlitequery($q);
+  return count($arr);
+}
 
 
 // Wörterliste laden und Array draus machen
@@ -254,11 +268,13 @@ function load_csv()
 
 if($action == 'check_code')
 {
+  $code = '';
+  $which = '';
   //$code = mysql_real_escape_string($_REQUEST['code']);
-  $code = trim($_REQUEST['code']);
-  $which = trim($_REQUEST['wh']);
+  if(isset($_POST['code'])){$code = trim($_POST['code']);}
+  if(isset($_POST['wh'])){$which = trim($_POST['wh']);}
 
-
+  
 
   $arr_result = array();
 // GER
@@ -273,6 +289,9 @@ if($action == 'check_code')
   $txt3_ger = '<b>Gratulation, so heiße ich!</b>';
   $txt3_ger .= '<p >Danke, dass Du mich, den Geist des Untermarkts besucht hast. Du darfst nun natürlich loggen, wenn Du die Logbedingung respektierst.</p>';
   $txt3_ger .= '<p >Nun zur Logbedingung: <br/>Bitte baue in Deinen Online-Log diesen typischen Görlitzer Ausdruck zusammen mit der 4-Stelligen Kontrollzahl ein: </p>';
+  
+  $txt4_ger = '<b>Sinnloses rumprobieren bringt doch nichts ;)<br/>Zu viele Falscheingaben!</b>';
+  $txt4_ger .= '<p>Bitte ein paar Minuten warten zum weitermachen.</p>';
 
 // ENG
   $txt0_eng = 'No, Sorry. the code "'.$code.'" was wrong or you have been waiting too long.<br/>Try again!Enter the number <b>[X]</b> in the input field to get the next step';
@@ -288,32 +307,45 @@ if($action == 'check_code')
   $txt3_eng .= '<p >Thank you for visiting me, the ghost of the Untermarkt. Of course, you may log, when you respect my log-condition! I hope, you had a lot of fun with me.</p>';
   $txt3_eng .= '<p >Here comes the log-condition:<br/>Please insert this typical dialect word and the 4Digit check-number into your Online-Log:</p>';
 
+  $txt4_eng = '<b>Too many wrong inputs!</b>';
+  $txt4_eng .= '<p>Please wait some minutes to go forward.</p>';
 
   $coderesult = 0;
-
-  if (preg_match("/^([a-zA-Z0-9öäüßÖÄÜß?!,.;:_() \n\r-]+)$/is", $code))
-  {
-    //$coderesult = check_code($code);
-    $coderesult = compare_code($code,$which);
+  
+  $trys = check_bruteforce();
+  
+  if ($trys > 20){
+    $coderesult = 4; // BRUTEFORCE!
+  }else{
+    if (preg_match("/^([a-zA-Z0-9öäüßÖÄÜß?!,.;:_() \n\r-]+)$/is", $code))
+    {
+      //$coderesult = check_code($code);
+      $coderesult = compare_code($code,$which);
+    }
   }
+  
+  
+
+  
 
   $snip = '';
   
   $arr_result['result'] = $coderesult;
+  $arr_result['try'] = $trys;
 
-  if($coderesult == 0){
+  if($coderesult == 0){ // Nummer falsch
     $arr_result['answer_ger'] = $txt0_ger;
     $arr_result['answer_eng'] = $txt0_eng;
     $arr_result['pic'] = 'umarkt_2.jpg';
-  }else if($coderesult == 1){
+  }else if($coderesult == 1){ // Nummer richtig
     $arr_result['answer_ger'] = $txt1_ger;
     $arr_result['answer_eng'] = $txt1_eng;
     $arr_result['pic'] = 'fbogen.jpg';
-  }else if($coderesult == 2){
+  }else if($coderesult == 2){ // Gobius falsch
     $arr_result['answer_ger'] = $txt2_ger;
     $arr_result['answer_eng'] = $txt2_eng;
     $arr_result['pic'] = 'fbogen.jpg';
-  }else if($coderesult == 3){
+  }else if($coderesult == 3){ // Gobius richtig
     $arr_snipplet = load_csv();
     $arr_result['answer_ger'] = $txt3_ger;
     $arr_result['answer_eng'] = $txt3_eng;
@@ -322,6 +354,10 @@ if($action == 'check_code')
     $arr_result['crossfoot'] = $cross;
     
     $snip = $arr_snipplet['de-gr'];
+  }else if($coderesult == 4){ // Bruteforce Versuch
+    $arr_result['answer_ger'] = $txt4_ger;
+    $arr_result['answer_eng'] = $txt4_eng;
+    $arr_result['pic'] = 'umarkt_2.jpg';
   }
   
   send_ajax( $arr_result );
@@ -331,7 +367,8 @@ if($action == 'check_code')
     '$ip_adress',
     $ts,
     '$code',
-    0,'$coderesult', 
+    '$trys',
+    '$coderesult', 
     '$cross', 
     '$snip')";
     

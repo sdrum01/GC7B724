@@ -26,7 +26,11 @@
   body { padding-top: 70px; }
   .wrong{
     color:red;
-    }
+  }
+  .bruteforce{
+    color:red;
+    font-weight:bold;
+  }
   </style>
   </head>
 
@@ -83,7 +87,7 @@ function get_table($mode)
     $q = "SELECT * FROM access_list WHERE step == 3 ORDER BY ts DESC LIMIT 30";
 
   }else{
-    $q = "SELECT * FROM access_list ORDER BY ts DESC LIMIT 30";
+    $q = "SELECT * FROM access_list ORDER BY ts DESC LIMIT 1000";
 
   }
 
@@ -117,13 +121,14 @@ $results = $db->query($q);
        $datum = date("d.m.y",$row['ts'] );
       }
      if(($row['step'] == 0)or($row['step'] == 2)){$css_wrong = 'class="wrong"';}
+     if($row['step'] == 4){$css_wrong = 'class="bruteforce"';}
      //if($date_ts == $date_ts_now-2){$css = 'class="yellow"';}
      $tbl .= "<tr $css $css_wrong>";
      $tbl .= "<td>".$row['id']."</td>";
     
      //$tbl .= "<td>".$row['ts']."</td>";
      $tbl .= "<td>".$datum."</td>";
-     $tbl .= "<td>".date("H:i",$row['ts'] )."</td>";
+     $tbl .= "<td>".date("H:i:s",$row['ts'] )."</td>";
      $tbl .= "<td>".$row['ip_adress']."</td>";
      $tbl .= "<td>".$row['step']."</td>";
      $tbl .= "<td>".$row['try']."</td>";
